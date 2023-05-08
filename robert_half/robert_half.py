@@ -91,14 +91,19 @@ def write_to_csv(df, outfile):
     df.to_csv(f'{outfile}.csv') 
            
 
-def scrape_rf(keywords,zip_code ):
+def scrape_rf(keywords,zip_code, all):
     response_json = send_request(keywords, zip_code)
     response_df = parse_response(response_json)
+    if not all:
+        response_df = response_df[response_df.employeeType != 'Permanent']
     write_to_csv(response_df,'robert_half')
+    
+
     return response_df
 
 
 if __name__ == '__main__':
-    df = scrape_rf('programmer', '94706')
+    df = scrape_rf('programmer', '94706',False)
+
     print(df)
     # write_to_csv(df, 'robert_half')
